@@ -15,7 +15,7 @@ function App() {
   const [cartItems, setCartItems] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState("");
-  const [cartOpend, setCartOpened] = React.useState(false);
+  const [cartOpened, setCartOpened] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -136,7 +136,7 @@ function App() {
           items={cartItems}
           onClose={() => setCartOpened(false)}
           onRemove={onRemoveItem}
-          opened={cartOpend}
+          opened={cartOpened}
         />
 
         <Header onClickCart={() => setCartOpened(true)} />
