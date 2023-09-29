@@ -132,38 +132,36 @@ function App() {
       }}
     >
       <div className="wrapper clear">
-        <Router basename="/react-sneakers">
-          <Drawer
-            items={cartItems}
-            onClose={() => setCartOpened(false)}
-            onRemove={onRemoveItem}
-            opened={cartOpened}
+        <Drawer
+          items={cartItems}
+          onClose={() => setCartOpened(false)}
+          onRemove={onRemoveItem}
+          opened={cartOpened}
+        />
+
+        <Header onClickCart={() => setCartOpened(true)} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                items={items}
+                cartItems={cartItems}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                onChangeSearchInput={onChangeSearchInput}
+                onAddToFavorite={onAddToFavorite}
+                onAddToCart={onAddToCart}
+                isLoading={isLoading}
+              />
+            }
+            exact
           />
 
-          <Header onClickCart={() => setCartOpened(true)} />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Home
-                  items={items}
-                  cartItems={cartItems}
-                  searchValue={searchValue}
-                  setSearchValue={setSearchValue}
-                  onChangeSearchInput={onChangeSearchInput}
-                  onAddToFavorite={onAddToFavorite}
-                  onAddToCart={onAddToCart}
-                  isLoading={isLoading}
-                />
-              }
-              exact
-            />
-
-            <Route path="/favorites" element={<Favorites />} />
-            {/* items={favorites} onAddToFavorite={onAddToFavorite} */}
-            <Route path="/orders" element={<Orders />} />
-          </Routes>
-        </Router>
+          <Route path="favorites" element={<Favorites />} />
+          {/* items={favorites} onAddToFavorite={onAddToFavorite} */}
+          <Route path="orders" element={<Orders />} />
+        </Routes>
       </div>
     </AppContext.Provider>
   );
