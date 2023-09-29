@@ -3,6 +3,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #e7f6ff;
+  .noScroll{
+    overflow: hidden;
+
+  }
 }
 
 * {
@@ -96,8 +100,6 @@ header {
     width: 200px;
   }
 }
-
-
 
 .cartTotalBlock {
   ul {

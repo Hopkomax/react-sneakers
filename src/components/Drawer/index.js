@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 
 import Info from "../Info";
@@ -13,6 +13,18 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
   const [orderId, setOrderId] = React.useState(null);
   const [isOrderComplete, setIsOrderComplete] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const styleBody = document.body.style.overflow;
+
+  useEffect(() => {
+    if (opened) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [opened]);
 
   const onClickOrder = async () => {
     try {
@@ -39,8 +51,9 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
   };
 
   return (
-    <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ""}`}>
-      <div className={styles.drawer}>
+    // <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ""}`}>
+    <div className={styles.overlay}>
+      <div className={`${styles.drawer} ${opened}`}>
         <h2 className="d-flex justify-between mb-30">
           Cart
           <img
@@ -85,7 +98,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
                 <li>
                   <span>Vat 5%:</span>
                   <div></div>
-                  <b>{(totalPrice / 100) * 5}$</b>
+                  <b>{((totalPrice / 100) * 5).toFixed(2)}$</b>
                 </li>
               </ul>
               <button

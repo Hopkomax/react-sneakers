@@ -45,21 +45,25 @@ function App() {
       const findItem = cartItems.find(
         (item) => Number(item.parentId) === Number(obj.id)
       );
+
       if (findItem) {
-        setCartItems((prev) =>
-          prev.filter((item) => Number(item.parentId) !== Number(obj.id))
-        );
         await axios.delete(
           `https://6510b5453ce5d181df5d775c.mockapi.io/cart/${findItem.id}`
         );
+
+        setCartItems((prev) =>
+          prev.filter((item) => Number(item.id) !== Number(findItem.id))
+        );
       } else {
-        setCartItems((prev) => [...prev, obj]);
         const { data } = await axios.post(
           "https://6510b5453ce5d181df5d775c.mockapi.io/cart",
           obj
         );
+
+        console.log("New item added to cart:", data);
+
         setCartItems((prev) => {
-          prev.map((item) => {
+          const updatedCartItems = prev.map((item) => {
             if (item.parentId === data.parentId) {
               return {
                 ...item,
@@ -68,10 +72,18 @@ function App() {
             }
             return item;
           });
+
+          if (
+            updatedCartItems.some((item) => Number(item.id) === Number(data.id))
+          ) {
+            return [...updatedCartItems];
+          } else {
+            return [...updatedCartItems, obj];
+          }
         });
       }
     } catch (error) {
-      alert("Error adding to cart ");
+      alert("Error adding to cart");
       console.error(error);
     }
   };
@@ -132,12 +144,21 @@ function App() {
       }}
     >
       <div className="wrapper clear">
-        <Drawer
+        {cartOpened && (
+          <Drawer
+            items={cartItems}
+            onClose={() => setCartOpened(false)}
+            onRemove={onRemoveItem}
+            opened={cartOpened}
+          />
+        )}
+
+        {/* <Drawer
           items={cartItems}
           onClose={() => setCartOpened(false)}
           onRemove={onRemoveItem}
           opened={cartOpened}
-        />
+        /> */}
 
         <Header onClickCart={() => setCartOpened(true)} />
         <Routes>
