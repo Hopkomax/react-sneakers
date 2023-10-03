@@ -2,9 +2,11 @@ import React from "react";
 import Card from "../components/Card";
 import axios from "axios";
 import { AppContext } from "../App";
+import { Link } from "react-router-dom";
 
 function Orders() {
-  const { onAddToFavorite, onAddToCart } = React.useContext(AppContext);
+  const { favorites } = React.useContext(AppContext);
+
   const [orders, setOrders] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -22,16 +24,36 @@ function Orders() {
       }
     })();
   }, []);
+
+  function renderCards(orderItems) {
+    return orderItems.map((item, index) => (
+      <Card key={index} loading={isLoading} {...item} favorites={favorites} />
+    ));
+  }
+
   return (
     <div className="content p-40">
       <div className="d-flex align-center justify-between mb-40">
         <h1>Orders</h1>
       </div>
-
       <div className="d-flex flex-wrap">
-        {(isLoading ? [...Array(8)] : orders).map((item, index) => (
-          <Card key={index} loading={isLoading} {...item} />
-        ))}
+        {isLoading ? (
+          renderCards([...Array(8)])
+        ) : orders.length > 0 ? (
+          renderCards(orders)
+        ) : (
+          <div className="d-flex flex-column align-center w100p emptyCollection">
+            <img width={80} src={"./img/empty-orders.jpg"} alt="EmptyOrders" />
+            <h3 className="mb-10">Orders not found</h3>
+            <p className="mt-5">You have not made any order</p>
+            <Link to="/">
+              <button className="greenButton">
+                <img src="img/arrow.svg" alt="Arrow" />
+                Return
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

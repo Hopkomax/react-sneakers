@@ -3,6 +3,7 @@ import Card from "../components/Card";
 
 function Home({
   items,
+  favorites,
   searchValue,
   setSearchValue,
   onChangeSearchInput,
@@ -20,6 +21,8 @@ function Home({
         onFavorite={(obj) => onAddToFavorite(obj)}
         onPlus={(obj) => onAddToCart(obj)}
         loading={isLoading}
+        favorites={favorites}
+        // favorited={favorites?.some((fav) => fav.parentId === item.id)}
         {...item}
       />
     ));

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 
 import Header from "./components/Header";
@@ -102,12 +102,16 @@ function App() {
 
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
+      const findItem = favorites.find(
+        (favObj) => Number(favObj.parentId) === Number(obj.id)
+      );
+      if (findItem) {
         await axios.delete(
-          `https://6510b5453ce5d181df5d775c.mockapi.io/favorites/${obj.id}`
+          `https://6510b5453ce5d181df5d775c.mockapi.io/favorites/${findItem.id}`
         );
+
         setFavorites((prev) =>
-          prev.filter((item) => Number(item.id) !== Number(obj.id))
+          prev.filter((item) => Number(item.parentId) !== Number(obj.id))
         );
       } else {
         const { data } = await axios.post(
@@ -115,6 +119,26 @@ function App() {
           obj
         );
         setFavorites((prev) => [...prev, data]);
+      }
+    } catch (error) {
+      alert("Failed to add to favorites");
+      console.error(error);
+    }
+  };
+
+  const onDeleteFromFavorite = async (obj) => {
+    try {
+      const existingItem = favorites.find(
+        (favObj) => Number(favObj.id) === Number(obj.id)
+      );
+
+      if (existingItem) {
+        await axios.delete(
+          `https://6510b5453ce5d181df5d775c.mockapi.io/favorites/${obj.id}`
+        );
+        setFavorites((prev) =>
+          prev.filter((item) => Number(item.id) !== Number(obj.id))
+        );
       }
     } catch (error) {
       alert("Failed to add to favorites");
@@ -141,6 +165,7 @@ function App() {
         setCartOpened,
         setCartItems,
         onAddToCart,
+        onDeleteFromFavorite,
       }}
     >
       <div className="wrapper clear">
@@ -152,13 +177,6 @@ function App() {
             opened={cartOpened}
           />
         )}
-
-        {/* <Drawer
-          items={cartItems}
-          onClose={() => setCartOpened(false)}
-          onRemove={onRemoveItem}
-          opened={cartOpened}
-        /> */}
 
         <Header onClickCart={() => setCartOpened(true)} />
         <Routes>
@@ -174,14 +192,14 @@ function App() {
                 onAddToFavorite={onAddToFavorite}
                 onAddToCart={onAddToCart}
                 isLoading={isLoading}
+                favorites={favorites}
               />
             }
             exact
           />
 
-          <Route path="favorites" element={<Favorites />} />
-          {/* items={favorites} onAddToFavorite={onAddToFavorite} */}
-          <Route path="orders" element={<Orders />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/orders" element={<Orders />} />
         </Routes>
       </div>
     </AppContext.Provider>

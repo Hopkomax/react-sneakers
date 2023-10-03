@@ -13,7 +13,6 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
   const [orderId, setOrderId] = React.useState(null);
   const [isOrderComplete, setIsOrderComplete] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const styleBody = document.body.style.overflow;
 
   useEffect(() => {
     if (opened) {

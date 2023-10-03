@@ -3,12 +3,12 @@ import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
 import "macro-css";
-import { BrowserRouter as Routes } from "react-router-dom";
+import { HashRouter as Routes } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Routes basename={process.env.PUBLIC_URL + "/"}>
+    <Routes basename="/">
       <App />
     </Routes>
   </React.StrictMode>
